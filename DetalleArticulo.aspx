@@ -7,10 +7,17 @@
     <style>
         h3, .Detalle {
             color: yellow;
+            font-family: 'Roboto', sans-serif;
         }
         .img{
             text-align:center;
         }
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    .card-title,
+    .card-text {
+        font-family: 'Roboto', sans-serif;
+
+    }
     </style>
 
     <h3>Detalle de tu articulo: </h3>
@@ -22,8 +29,8 @@
 
 
 
-    <div class="Detalle">
-
+    <div class="Detalle" >
+        <div style="font-family: 'Roboto', sans-serif;">
         <div class="row">
             <div class="col-6 ">
                 <div class="mb-3">
@@ -67,7 +74,7 @@
             </div>
         </div>
 
-
+</div>
 
     </div>
 
