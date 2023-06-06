@@ -4,14 +4,14 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-    .card-title,
-    .card-text {
-        font-family: 'Roboto', sans-serif;
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
-    }
-</style>
+        .card-title,
+        .card-text {
+            font-family: 'Roboto', sans-serif;
+        }
+    </style>
 
     <!-- Catálogo -->
     <div id="Catalogo">
@@ -33,15 +33,17 @@
 
             <div class="col mb-4">
                 <div class="card border-dark align-content-sm-center">
-                    <img style="max-width: 300px; max-height: 300px; object-fit: contain" src="<% = item.ImagenUrl %>" class="card-img-top" alt="Imagen no disponible">
+                    <img style="max-width: 300px; max-height: 300px; object-fit: contain" src="<%= item.ImagenUrl %>" class="card-img-top" alt="Imagen no disponible">
                     <div class="card-body">
-                        <h5 style="color: darkblue; font-style: oblique; font-family: 'Roboto', sans-serif;" class="card-title"><% = item.Nombre %></h5>
-                        <p style="color: black; font-style: italic; font-family: 'Roboto', sans-serif;" class="card-text"><%= item.Marca %></p>
-                        <a href="Detalle.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-info">Detalle</a>
-                        <a href="Carrito.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-primary">Añadir al carrito</a>
+                        <h5 class="card-title"><%= item.Nombre %></h5>
+                        <p class="card-text"><%= item.Marca %></p>
+                        <a href="Detalle.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-info mb-1">Detalle</a>
+                        <a href="Carrito.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-primary mb-1">Añadir al carrito</a>
                     </div>
                 </div>
             </div>
+
+
 
 
             <% } %>
