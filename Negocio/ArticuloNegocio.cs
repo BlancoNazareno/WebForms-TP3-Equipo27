@@ -25,7 +25,7 @@ namespace Negocio
                 //acceso.setearConsulta("Select A.ID, A.Codigo Codigo, A.Nombre, A.Descripcion, A.Precio, C.Descripcion Categoria, C.Id IdCategoria, M.Id IdMarca, M.Descripcion Marca, I.Id IdImagen, I.ImagenUrl ImagenUrl From ARTICULOS A join CATEGORIAS C on A.IdCategoria = C.Id join MARCAS M on A.IdMarca = M.Id join IMAGENES I on A.Id = I.IdArticulo");
                 //acceso.setearConsulta("Select A.ID, A.Codigo Codigo, A.Nombre, A.Descripcion, A.Precio, C.Descripcion Categoria, C.Id IdCategoria, M.Id IdMarca, M.Descripcion Marca From ARTICULOS A join CATEGORIAS C on A.IdCategoria = C.Id join MARCAS M on A.IdMarca = M.Id");
                 acceso.setearConsulta("Select A.Id, A.Codigo, A.Nombre, A.Descripcion, A.Precio, A.IdMarca, A.IdCategoria, " +
-                    "I.Id, I.IdArticulo, I.ImagenUrl, M.Id, M.Descripcion, C.Id, C.Descripcion " +
+                    "I.Id, I.IdArticulo, I.ImagenUrl, M.Id IdMarca, M.Descripcion Marca, C.Id IdCategoria, C.Descripcion Categoria " +
                     "From ARTICULOS A inner join IMAGENES I on A.Id = I.IdArticulo " +
                     "inner join MARCAS M on A.IdMarca = M.Id " +
                     "left join CATEGORIAS C on A.IdCategoria = C.Id");//puse esta consulta para q muestre TODOS los articulos, probar
@@ -40,7 +40,7 @@ namespace Negocio
                 //    "inner join MARCAS M on A.IdMarca = M.Id " +
                 //    "left join CATEGORIAS C on A.IdCategoria = C.Id");//puse esta consulta para q muestre TODOS los articulos, probar. Con esta hay conflicto, cuando muestro la marca y categoria dicen lo mismo que en descripcion
                 acceso.ejecutarLectura();
-               
+
                 while (acceso.Lector.Read())
                 {
                     Articulo aux = new Articulo();
@@ -57,11 +57,14 @@ namespace Negocio
                     aux.Categoria.Descripcion = (string)acceso.Lector["Descripcion"];
 
                     aux.Marca = new Marca();
-                    aux.Marca.ID = (int)acceso.Lector["IdMarca"]; 
+                    aux.Marca.ID = (int)acceso.Lector["IdMarca"];
                     aux.Marca.Descripcion = (string)acceso.Lector["Descripcion"];
 
                     //aux.ImagenUrl = new Imagen();
                     //aux.ImagenUrl.ImagenUrl = (string)acceso.Lector["ImagenUrl"];
+                    
+                    //cambié a string en la clase Articulo la parte de la Imagen
+                    aux.ImagenUrl = (string)acceso.Lector["ImagenUrl"];
 
                     aux.Marca = new Marca();
                     aux.Marca.ID = (int)acceso.Lector["IdMarca"];
@@ -71,8 +74,7 @@ namespace Negocio
                     aux.Categoria.ID = (int)acceso.Lector["IdCategoria"];
                     aux.Categoria.Descripcion = (string)acceso.Lector["Categoria"];
 
-                    //cambié a string en la clase Articulo la parte de la Imagen
-                    aux.ImagenUrl = (string)acceso.Lector["ImagenUrl"];
+
 
                     lista.Add(aux);
                 }
@@ -244,24 +246,31 @@ namespace Negocio
             try
             {
                 //a esta consulta(q usamos mas arriba tmb) la usamos como base, le vamos a agregar posibles filtros al final
-                string consulta = "Select A.ID, A.Codigo Codigo, A.Nombre, A.Descripcion, A.Precio, " +
-                    "C.Descripcion Categoria, C.Id IdCategoria, M.Id IdMarca, M.Descripcion Marca, " +
-                    "I.Id IdImagen, I.ImagenUrl ImagenUrl From ARTICULOS A join CATEGORIAS C " +
-                    "on A.IdCategoria = C.Id join MARCAS M on A.IdMarca = M.Id join IMAGENES I on A.Id = I.IdArticulo ";
+                string consulta = "Select A.ID, A.Codigo , A.Nombre, A.Descripcion, A.Precio, " +
+                    "C.Descripcion as DescripcionCategoria, C.Id as IdCategoria, M.Id as IdMarca, M.Descripcion as DescripcionMarca, " +
+                    "I.Id, I.ImagenUrl  " +
+                    "From " +
+                    "ARTICULOS A join CATEGORIAS C " +
+                    "on A.IdCategoria = C.Id " +
+                    "join MARCAS M " +
+                    "on A.IdMarca = M.Id " +
+                    "join IMAGENES I " +
+                    "on A.Id = I.IdArticulo ";
+
                 //ahora a nuestra consulta le agregamos algo al final
 
                 if (campo == "Nombre")
                 {
                     switch (criterio)
                     {
+                        case "Contiene":
+                            consulta += "Where Nombre like '%" + filtro + "%'";
+                            break;
                         case "Comienza con":
                             consulta += "Where Nombre like '" + filtro + "%'";//FIJARSE BIEN, xq en SQL lee lo q va entre las comillas simples ''
                             break;
                         case "Termina con":
                             consulta += "Where Nombre like '%" + filtro + "'";
-                            break;
-                        default:
-                            consulta += "Where Nombre like '%" + filtro + "%'";
                             break;
                     }
                 }
@@ -271,13 +280,13 @@ namespace Negocio
                     switch (criterio)
                     {
                         case "Comienza con":
-                            consulta += "Where Marca like '" + filtro + "%'";
+                            consulta += "Where M.Descripcion like '" + filtro + "%'";
                             break;
                         case "Termina con":
-                            consulta += "Where Marca like '%" + filtro + "'";
+                            consulta += "Where M.Descripcion like '%" + filtro + "'";
                             break;
-                        default:
-                            consulta += "Where Marca like '%" + filtro + "%'";
+                        case "Contiene":
+                            consulta += "Where M.Descripcion like '%" + filtro + "%'";
                             break;
                     }
                 }
@@ -287,13 +296,13 @@ namespace Negocio
                     switch (criterio)
                     {
                         case "Comienza con":
-                            consulta += "Where Categoria like '" + filtro + "%'";//FIJARSE BIEN, xq en SQL lee lo q va entre las comillas simples ''
+                            consulta += "Where C.Descripcion like '" + filtro + "%'";//FIJARSE BIEN, xq en SQL lee lo q va entre las comillas simples ''
                             break;
                         case "Termina con":
-                            consulta += "Where Categoria like '%" + filtro + "'";
+                            consulta += "Where C.Descripcion like '%" + filtro + "'";
                             break;
-                        default:
-                            consulta += "Where Categoria like '%" + filtro + "%'";
+                        case "Contiene":
+                            consulta += "Where C.Descripcion like '%" + filtro + "%'";
                             break;
                     }
                 }
@@ -305,7 +314,7 @@ namespace Negocio
                 while (datos.Lector.Read())
                 {
                     Articulo aux = new Articulo();
-                    aux.ID= (int)datos.Lector["id"];
+                    aux.ID = (int)datos.Lector["Id"];
                     aux.Nombre = (string)datos.Lector["Nombre"];
                     aux.Descripcion = (string)datos.Lector["Descripcion"];
                     if (!(datos.Lector["ImagenUrl"] is DBNull))
@@ -313,12 +322,12 @@ namespace Negocio
                     aux.Precio = (decimal)datos.Lector["Precio"];
 
                     aux.Marca = new Marca();
-                    aux.Marca.ID = (int)datos.Lector["idMarca"];
-                    aux.Marca.Descripcion = (string)datos.Lector["Marca"];
+                    aux.Marca.ID = (int)datos.Lector["IdMarca"];
+                    aux.Marca.Descripcion = (string)datos.Lector["DescripcionMarca"];
 
                     aux.Categoria = new Categoria();
-                    aux.Categoria.ID = (int)datos.Lector["idCategoria"];
-                    aux.Categoria.Descripcion = (string)datos.Lector["Categoria"];
+                    aux.Categoria.ID = (int)datos.Lector["IdCategoria"];
+                    aux.Categoria.Descripcion = (string)datos.Lector["DescripcionCategoria"];
 
                     lista.Add(aux);
 
