@@ -26,7 +26,6 @@ namespace Dominio
         //public Imagen ImagenUrl { get; set; }
 
         public string ImagenUrl { get; set; }//2junio- lo cambie a string, estaba en tipo Imagen
-         //6a26bd3 (Modificando)
 
     }
 }

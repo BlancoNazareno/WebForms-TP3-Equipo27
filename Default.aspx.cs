@@ -12,32 +12,51 @@ namespace WebForms_TP3_Equipo27
 {
     public partial class Default : System.Web.UI.Page
     {
-        public List<Articulo> ListaArticulo { get; set; }//creo la propiedad tipo Lista
+    public List<Articulo> ListaArticulo { get; set; }//creo la propiedad tipo Lista
     
     protected void Page_Load(object sender, EventArgs e)
     {
         ArticuloNegocio negocio = new ArticuloNegocio();
-        ListaArticulo = negocio.listar();
+            //ListaArticulo = negocio.listar();
 
-        if (!IsPostBack)
-        {
+            //if (!IsPostBack)
+            //{
 
-            repRepetidor.DataSource = ListaArticulo;
-            repRepetidor.DataBind();
+            //    repRepetidor.DataSource = ListaArticulo;
+            //    repRepetidor.DataBind();
+            //}
+
+            //if (Session["listaArticulos"] == null)//antes de guardarla en SESSION, pregunto si no existe ya
+            //{
+            //    //guardo la lista en SESSION, y ahi la puedo usar
+            //    Session.Add("listaArticulos", negocio.listar());
+            //}
+            try
+            {
+                if (Session["listaBuscados"] == null)
+                {
+                    ListaArticulo = negocio.listar();
+                    Session.Add("listaArticulos", ListaArticulo);
+                }
+                else
+                {
+
+                    ListaArticulo = (List<Articulo>)Session["listaBuscados"];
+                    Session["listaBuscados"] = null;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+
+
+
+
         }
-
-        if (Session["listaArticulos"] == null)//antes de guardarla en SESSION, pregunto si no existe ya
-        {
-            //guardo la lista en SESSION, y ahi la puedo usar
-            Session.Add("listaArticulos", negocio.listar());
-        }
-
-
-
-
-
-
-    }
 
 
 
