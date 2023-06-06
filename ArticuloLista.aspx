@@ -13,7 +13,8 @@
             color: white;
         }
     </style>
-
+    
+    <div class="row row col-10" style="margin-left: 3rem">
     <h1>Lista de Articulos</h1>
 
     <div class="Busqueda">
@@ -45,7 +46,7 @@
                     <div class="mb-3">
                         <asp:Label Text="Campo" ID="lblCampo" runat="server" />
                         <asp:DropDownList runat="server" AutoPostBack="true" CssClass="form-control"
-                            ID="ddlCampo" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged" ForeColor="White">
+                            ID="ddlCampo" OnSelectedIndexChanged="ddlCampo_SelectedIndexChanged" ForeColor="Gray">
                             <asp:ListItem Text="Nombre" />
                             <asp:ListItem Text="Categoria" />
                             <asp:ListItem Text="Marca" />
@@ -99,9 +100,9 @@
                 <%--aca el DataField es diferente porque tengo en mi clase Articulo la propiedad Marca y Categoria(las cuales son otra clase) --%>
             </Columns>
         </asp:GridView>
-        <a href="Default.aspx" class="btn btn-primary">Volver atras</a>
+        <a href="Default.aspx" class="btn btn-primary">Volver atrás</a>
     </div>
-
+</div>
 
 
 
