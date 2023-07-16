@@ -5,7 +5,7 @@ using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
 
-namespace WebForms_TP3_Equipo27
+namespace Turnera_TPC_Equipo27
 {
     public class Global : System.Web.HttpApplication
     {

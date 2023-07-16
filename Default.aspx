@@ -1,52 +1,65 @@
-﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="WebForms_TP3_Equipo27.Default" %>
+﻿<%@ Page Title="" Language="C#" MasterPageFile="~/MasterPage.Master" AutoEventWireup="true" CodeBehind="Default.aspx.cs" Inherits="Turnera_TPC_Equipo27.Default" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <script>
+        function soloNumeros(event) {
+            var charCode = event.which ? event.which : event.keyCode;
+            if (charCode < 48 || charCode > 57) {
+                return false;
+            }
+            return true;
+        }
+    </script>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
-
-        .card-title,
-        .card-text {
-            font-family: 'Roboto', sans-serif;
-        }
-    </style>
-
-    <!-- Catálogo -->
-    <div id="Catalogo">
-        <div class="container" style="background-color: rgb(65, 65, 65);">
-            <div class="text-light p-3 text-center" style="margin-top: 3rem; margin-bottom: 2rem">
-                <h4><strong>Catálogo</strong></h4>
-
-                <p>¡Te invitamos a explorar nuestro catálogo de productos!</p>
-            </div>
-
+    <div class="container" style="background-color: rgb(65, 65, 65);">
+        <div class="text-light p-3 text-center" style="margin-top: 3rem; margin-bottom: 2rem">
+            <h4><strong>Login</strong></h4>
+            <br />
+            <p>Bienvenido a Space Medicine, tu sitio de gestión de turnos</p>
+            <br />
+            <p>Debes loguearte para acceder al sitio</p>
         </div>
+
     </div>
 
-    <!-- Cards con foreach -->
     <div class="container">
-        <div class="row row-cols-1 row-cols-md-4">
-            <%foreach (Dominio.Articulo item in ListaArticulo)
-                { %>
-
-            <div class="col mb-4">
-                <div class="card border-dark align-content-sm-center">
-                    <img style="max-width: 300px; max-height: 300px; object-fit: contain" src="<%= item.ImagenUrl %>" class="card-img-top" alt="Imagen no disponible">
-                    <div class="card-body">
-                        <h5 class="card-title"><%= item.Nombre %></h5>
-                        <p class="card-text"><%= item.Marca %></p>
-                        <a href="Detalle.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-info mb-1">Detalle</a>
-                        <a href="Carrito.aspx?idArticulo=<%=item.ID.ToString()%>" class="btn btn-primary mb-1">Añadir al carrito</a>
+        <div class="row d-flex justify-content-center">
+            <div class="col-6">
+                <div class="mb-3">
+                    <label for="txtDNI" class="form-label text-white">DNI: </label>
+                    <asp:TextBox runat="server" ID="txtDNI" CssClass="form-control" onkeypress="return soloNumeros(event)" />
+                </div>
+                <div class="mb-3">
+                    <label for="txtContrasenia" class="form-label text-white">Contraseña: </label>
+                    <asp:TextBox runat="server" ID="txtContrasenia" CssClass="form-control" TextMode="Password" />
+                </div>
+                <div class="mb-3 text-center">
+                    <asp:Button Text="Aceptar" ID="btnAceptar" CssClass="btn btn-primary mx-2" runat="server" OnClick="btnAceptar_Click" />
+                    <asp:Button Text="Cancelar" ID="btnCancelar" CssClass="btn btn-danger mx-2" runat="server" OnClick="btnCancelar_Click" />
+                    <div class="mt-3">
+                        <asp:Label Text="" ID="lblErrorLogin" runat="server" CssClass="text-center text-danger" />
+                    </div>
+                    <div class="mt-3">
+                        <p class="form-label text-white">
+                            ¿No estás registrado?
+                            <br />
+                            Podés hacerlo acá
+                        </p>
+                        <asp:Button Text="Registrarse" ID="btnRegistrarse" CssClass="btn btn-info mx-2" runat="server" OnClick="btnRegistrarse_Click" />
+                        <br />
+                        <br />
+                        <p class="form-label text-white">
+                            Consulte gratis que Obra Social/Prepaga posee actualmente 
+                            <a href="https://servicioswww.anses.gob.ar/ooss2/" style="text-decoration: underline; 
+                            font-style: italic; " target="_blank">aquí</a>
+                        </p>
+                        
                     </div>
                 </div>
             </div>
-
-
-
-
-            <% } %>
         </div>
     </div>
+
 </asp:Content>

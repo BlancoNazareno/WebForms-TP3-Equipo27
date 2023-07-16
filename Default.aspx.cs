@@ -4,74 +4,76 @@ using System.Linq;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Negocio;
-using Dominio;
+using negocio;
+using dominio;
 
-
-namespace WebForms_TP3_Equipo27
+namespace Turnera_TPC_Equipo27
 {
     public partial class Default : System.Web.UI.Page
-    {
-    public List<Articulo> ListaArticulo { get; set; }//creo la propiedad tipo Lista
-    
-    protected void Page_Load(object sender, EventArgs e)
-    {
-        ArticuloNegocio negocio = new ArticuloNegocio();
-            //ListaArticulo = negocio.listar();
+    {   //falta implementar un botón para desloguearse
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (Session["error"] != null)
+            {
+                lblErrorLogin.Text = Session["error"].ToString();
+            }
 
-            //if (!IsPostBack)
-            //{
 
-            //    repRepetidor.DataSource = ListaArticulo;
-            //    repRepetidor.DataBind();
-            //}
+            if ((Session["usuario"] != null) && (((Paciente)Session["usuario"]).TipoUsuario == TipoUsuario.PACIENTE))
+            {
+                //ya está logueado como paciente, por lo que redirige a su área correspondiente
+                Response.Redirect("HomePacientes.aspx");
+            }
 
-            //if (Session["listaArticulos"] == null)//antes de guardarla en SESSION, pregunto si no existe ya
-            //{
-            //    //guardo la lista en SESSION, y ahi la puedo usar
-            //    Session.Add("listaArticulos", negocio.listar());
-            //}
+            else if ((Session["usuario"] != null) &&
+                (((Paciente)Session["usuario"]).TipoUsuario == TipoUsuario.SUBADMIN ||
+                ((Paciente)Session["usuario"]).TipoUsuario == TipoUsuario.ADMIN))
+            {
+                //ya está logueado como ADMIN o SUBADMIN, por lo que redirige a su área correspondiente
+                Response.Redirect("HomeAdmin.aspx");
+            }
+
+
+        }
+
+        protected void btnAceptar_Click(object sender, EventArgs e)
+        {
+            Paciente paciente;
+            PacienteNegocio negocio = new PacienteNegocio();
+
             try
             {
-                if (Session["listaBuscados"] == null)
+                paciente = new Paciente(int.Parse(txtDNI.Text), txtContrasenia.Text);
+                if (negocio.loguear(paciente) && paciente.TipoUsuario == TipoUsuario.PACIENTE)
                 {
-                    ListaArticulo = negocio.listar();
-                    Session.Add("listaArticulos", ListaArticulo);
+                    Session.Add("usuario", paciente);
+                    Response.Redirect("HomePacientes.aspx");
+                }
+                else if (negocio.loguear(paciente) && (paciente.TipoUsuario == TipoUsuario.ADMIN || paciente.TipoUsuario == TipoUsuario.SUBADMIN))
+                {
+                    Session.Add("usuario", paciente);
+                    Response.Redirect("HomeAdmin.aspx");
                 }
                 else
                 {
-
-                    ListaArticulo = (List<Articulo>)Session["listaBuscados"];
-                    Session["listaBuscados"] = null;
+                    lblErrorLogin.Text = "DNI o contraseña incorrectos";
                 }
-
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-
-                throw;
+                lblErrorLogin.Text = "Error al iniciar sesión: " + ex.Message;
             }
-
-
-
-
-
         }
 
 
+        protected void btnCancelar_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("Default.aspx");
+        }
+        protected void btnRegistrarse_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("FormNewPaciente.aspx");
+        }
 
-
-
-
-
-
-    protected void btnArticulo_Click(object sender, EventArgs e)//esto lo cambie por el btnAgregar_Click
-    {
-        string valor = ((Button)sender).CommandArgument;
     }
-
-    protected void btnAgregar_Click(object sender, EventArgs e)
-    {
-        }
-}
 }

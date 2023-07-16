@@ -5,17 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Negocio
+namespace negocio
 {
-    internal class AccesoDatos
+    public class AccesoDatos
     {
         private SqlConnection conexion;
         private SqlCommand comando;
         private SqlDataReader lector;
-
-        public SqlCommand Comando
-        { get { return comando; } 
-        }
         public SqlDataReader Lector
         {
             get { return lector; }
@@ -23,9 +19,9 @@ namespace Negocio
 
         public AccesoDatos()
         {
-             conexion = new SqlConnection("server = localhost; database=CATALOGO_P3_DB; integrated security=true"); //puse para q funcione
-            //conexion = new SqlConnection("data source=localhost; initial catalog= CATALOGO_P3_DB ; integrated security=sspi"); /*original de naza*/
-            //conexion = new SqlConnection("data source= .\\sqlexpress;Initial Catalog=CATALOGO_P3_DB;Persist Security Info=True;User ID=usuario;Password=password\"");
+            //conexion = new SqlConnection("server=localhost; database=Turnera_DB; integrated security=true");
+            conexion = new SqlConnection("server=.\\SQLEXPRESS; database=Turnera_DB; integrated security=true");
+            //conexion = new SqlConnection("server=LAPTOP-MND4I3DD\\DIEGOSQLEXPRESS; database=Turnera_DB; integrated security=true");
             comando = new SqlCommand();
         }
 
@@ -33,6 +29,12 @@ namespace Negocio
         {
             comando.CommandType = System.Data.CommandType.Text;
             comando.CommandText = consulta;
+        }
+
+        public void setearProcedimiento(string sp)
+        {
+            comando.CommandType = System.Data.CommandType.StoredProcedure;
+            comando.CommandText = sp;
         }
 
         public void ejecutarLectura()
@@ -46,10 +48,41 @@ namespace Negocio
             }
             catch (Exception ex)
             {
-
                 throw ex;
             }
+        }
 
+        public void ejecutarAccion()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                comando.ExecuteNonQuery();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public int ejecutarAccionScalar()
+        {
+            comando.Connection = conexion;
+            try
+            {
+                conexion.Open();
+                return int.Parse(comando.ExecuteScalar().ToString());
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public void setearParametro(string nombre, object valor)
+        {
+            comando.Parameters.AddWithValue(nombre, valor);
         }
 
         public void cerrarConexion()
@@ -61,4 +94,3 @@ namespace Negocio
 
     }
 }
-

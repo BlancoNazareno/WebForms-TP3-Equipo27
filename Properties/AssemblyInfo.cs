@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("WebForms_TP3_Equipo27")]
+[assembly: AssemblyTitle("Turnera_TPC_Equipo27")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("WebForms_TP3_Equipo27")]
+[assembly: AssemblyProduct("Turnera_TPC_Equipo27")]
 [assembly: AssemblyCopyright("Copyright ©  2023")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f2893ba3-3ca7-4886-916f-3c73ae2bd23c")]
+[assembly: Guid("6529ee4d-ebae-4031-bf26-7098c8f956ac")]
 
 // Version information for an assembly consists of the following four values:
 //
